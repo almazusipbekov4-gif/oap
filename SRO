@@ -1,0 +1,85 @@
+def read_grades():
+    """Вводит оценки от 0 до 100 и возвращает список оценок."""
+    grades = []
+
+    while True:
+        amount_text = input("Сколько оценок вы хотите ввести? ")
+        try:
+            amount = int(amount_text)
+            if amount <= 0:
+                print("Ошибка: количество оценок должно быть больше нуля.")
+                continue
+            break
+        except ValueError:
+            print("Ошибка: введите целое число.")
+
+    for i in range(amount):
+        while True:
+            grade_text = input(f"Введите оценку №{i + 1} (0–100): ")
+            try:
+                grade = float(grade_text)
+                if grade < 0 or grade > 100:
+                    print("Ошибка: оценка должна быть от 0 до 100.")
+                    continue
+                grades.append(grade)
+                break
+            except ValueError:
+                print("Ошибка: введите число.")
+
+    return grades
+
+
+def analyze_grades(grades, threshold):
+    """Рассчитывает основные показатели по списку оценок."""
+    average = sum(grades) / len(grades)
+    minimum = min(grades)
+    maximum = max(grades)
+
+    above_threshold = 0
+    for grade in grades:
+        if grade > threshold:
+            above_threshold += 1
+
+    return average, minimum, maximum, above_threshold
+
+
+def get_category(average):
+    """Определяет категорию по среднему баллу."""
+    if average >= 90:
+        return "Отличная успеваемость"
+    elif average >= 75:
+        return "Хорошая успеваемость"
+    elif average >= 50:
+        return "Удовлетворительная успеваемость"
+    else:
+        return "Низкая успеваемость"
+
+
+def main():
+    print("=== Анализ успеваемости студентов ===")
+    grades = read_grades()
+
+    while True:
+        threshold_text = input("Введите порог для подсчёта оценок выше него (0–100): ")
+        try:
+            threshold = float(threshold_text)
+            if threshold < 0 or threshold > 100:
+                print("Ошибка: порог должен быть от 0 до 100.")
+                continue
+            break
+        except ValueError:
+            print("Ошибка: введите число.")
+
+    average, minimum, maximum, above_threshold = analyze_grades(grades, threshold)
+
+    print("\n=== Результаты анализа ===")
+    print("Оценки:", grades)
+    print(f"Средний балл: {average:.2f}")
+    print(f"Минимальная оценка: {minimum:g}")
+    print(f"Максимальная оценка: {maximum:g}")
+    print(f"Количество оценок выше {threshold:g}: {above_threshold}")
+    print("Категория:", get_category(average))
+
+
+if __name__ == "__main__":
+    main()
